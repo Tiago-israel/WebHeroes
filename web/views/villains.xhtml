@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form>
+            <h:commandLink value="Adicionar novo" action="#{villainBean.add}"/>
+        </h:form>
+        <h:panelGroup rendered="#{villainBean.status == 'Add'}" >
+            <div class="col-md-6 col-md-offset-3">
+                <p:panel >
+                    <h:form enctype="multipart/form-data">
+                        <div class="form-group">
+                            <p:outputLabel value="Nome"/>
+                            <p:inputText value="#{villainBean.villain.name}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Planeta natal"/>
+                            <p:inputText value="#{villainBean.villain.natalPlanet}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Data de criação"/><br/>
+                            <p:calendar id="popup" value="#{villainBean.villain.creationDate}" />
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Nível de poder"/><br/>
+                            <p:inputNumber id="lvlpower" value="#{villainBean.villain.power}" style="margin-bottom: 50px;" />  <br/><br/>
+                            <p:slider for="lvlpower" minValue="0"  maxValue="10" />
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Fraqueza"/>
+                            <p:inputText value="#{villainBean.villain.weakness}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Foto"/><br/>
+                            <p:fileUpload value="#{villainBean.file}"  mode="simple" skinSimple="true"/>
+                        </div>
+                        <div class="form-group">
+                            <p:commandButton value="Salvar" class="btn-block" ajax="false" actionListener="#{villainBean.save()}"  />
+                        </div>
+                    </h:form>
+                </p:panel>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{villainBean.status == 'View'}">
+            <div class="col-md-12">
+                <p:repeat value="#{villainBean.villains}" var="villain">
+                    <div class="col-md-3" style="margin-right: 40px;margin-bottom: 10px;">
+                        <p:panelGrid columns="2" >
+                            <f:facet name="header">
+                                <p:graphicImage name="./img/villains/#{villain.photoName}" class="custom-img" />
+                            </f:facet>
+
+                            <h:outputText value="Nome:" />
+                            <h:outputText value="#{villain.name}" />
+
+                            <h:outputText value="Planeta natal:" />
+                            <h:outputText value="#{villain.natalPlanet}" />
+
+                            <h:outputText value="Nível de poder(1 a 10):" />
+                            <h:outputText value="#{villain.power}" />
+
+                            <h:outputText value="Fraqueza:" />
+                            <h:outputText value="#{villain.weakness}" />
+
+                            <h:outputText value="Editora:" />
+                            <h:outputText value="#{villain.publisher}" />
+                            
+                            <h:outputText value="Editar:" />
+                            <h:form>
+                                <h:commandLink value="editar" action="#{villainBean.edit(villain)}"/>
+                            </h:form>
+                        </p:panelGrid>
+                    </div>
+                </p:repeat>
+            </div>
+        </h:panelGroup>
+        
+    </ui:define>
+
+</ui:composition>

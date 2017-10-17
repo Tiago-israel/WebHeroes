@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/layout.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form>
+            <h:commandLink value="Adicionar novo" action="#{heroBean.add}"/>
+        </h:form>
+        <h:panelGroup rendered="#{heroBean.status == 'Add'}" >
+            <div class="col-md-6 col-md-offset-3">
+                <p:panel >
+                    <h:form enctype="multipart/form-data">
+                        <div class="form-group">
+                            <p:outputLabel value="Nome"/>
+                            <p:inputText value="#{heroBean.hero.name}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Planeta natal"/>
+                            <p:inputText value="#{heroBean.hero.natalPlanet}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Data de criação"/><br/>
+                            <p:calendar id="popup" value="#{heroBean.hero.creationDate}" />
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Nível de poder"/><br/>
+                            <p:inputNumber id="lvlpower" value="#{heroBean.hero.power}" style="margin-bottom: 50px;" />  <br/><br/>
+                            <p:slider for="lvlpower" minValue="0"  maxValue="10" />
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Fraqueza"/>
+                            <p:inputText value="#{heroBean.hero.weakness}" class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <p:outputLabel value="Foto"/><br/>
+                            <p:fileUpload value="#{heroBean.file}"  mode="simple" skinSimple="true"/>
+                        </div>
+                        <div class="form-group">
+                            <p:selectOneMenu id="console" value="#{heroBean.hero.publisher}" style="width:100%">
+                                <f:selectItem itemLabel="DC" itemValue="DC" />
+                                <f:selectItem itemLabel="Marvel" itemValue="Marvel" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="form-group">
+                            <p:commandButton value="Salvar" class="btn-block" ajax="false" actionListener="#{heroBean.save}"  />
+                        </div>
+                    </h:form>
+                </p:panel>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{heroBean.status == 'View'}">
+            <h:form>
+
+
+                <div class="ui-g-2">
+
+                    <p:menu>
+                        <p:submenu label="Navigations">
+                            <p:menuitem value="Marvel" update="heroi" ajax="false"   actionListener="#{heroBean.filterHeroes('Marvel')}"  icon="ui-icon-home"/>
+                            <p:menuitem value="DC" update="heroi" ajax="false"  actionListener="#{heroBean.filterHeroes('DC')}" icon="ui-icon-star"/>
+                        </p:submenu>
+                    </p:menu>
+
+                </div>
+                <div class="ui-g-10">
+                    <ui:repeat value="#{heroBean.heroes}"  id="heroi" var="hero" >
+                        <div class="ui-g-3"  >
+                            <p:panelGrid columns="2" >
+                                <f:facet name="header">
+                                    <p:graphicImage name="./img/heroes/#{hero.photoName}" class="img-responsive custom-img" />
+                                </f:facet>
+
+                                <h:outputText value="Nome:" />
+                                <h:outputText value="#{hero.name}" />
+
+                                <h:outputText value="Planeta natal:" />
+                                <h:outputText value="#{hero.natalPlanet}" />
+
+                                <h:outputText value="Nível de poder(1 a 10):" />
+                                <h:outputText value="#{hero.power}" />
+
+                                <h:outputText value="Fraqueza:" />
+                                <h:outputText value="#{hero.weakness}" />
+
+                                <h:outputText value="Editora:" />
+                                <h:outputText value="#{hero.publisher}" />
+
+                                <h:outputText value="Editar:" />
+                                <h:commandLink value="editar" action="#{heroBean.edit(hero)}"/>
+                            </p:panelGrid>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </h:form>
+        </h:panelGroup>
+
+    </ui:define>
+</ui:composition>
